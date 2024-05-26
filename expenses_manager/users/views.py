@@ -34,10 +34,16 @@ def get_all_users(request):
 @api_view(["GET"])
 def get_user_by_id(request, user_id):
     try:
-        user = Users.objects.filter(id=user_id)
-        if user.exists():
-            serializer = UsersSerializer(user, many=True)
-            return Response({"user": serializer.data})
+        q = Users.objects.filter(id=user_id)
+        if q.exists():
+            user = q.get()
+            serializer = UsersSerializer(user)
+            result = {"user": serializer.data}
+
+            currency = Currency.objects.get(pk=result["user"]["currency"])
+            currency_serializer = CurrencySerializer(currency)
+            result["user"]["currency"] = currency_serializer.data
+            return Response(result)
         else:
             return Response({"error": "User not found"}, status=404)
     except Users.DoesNotExist:

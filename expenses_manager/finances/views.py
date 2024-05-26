@@ -115,6 +115,13 @@ def get_finances_by_user(request, user_id):
         finances = Finances.objects.filter(user_id=user_id)
         if finances.exists():
             serializer = FinancesSerializer(finances, many=True)
+            result = {"finances": serializer.data}
+
+            for finance_item in result["finances"]:
+                category = Category.objects.get(pk=finance_item["category"])
+                category_serializer = CategorySerializer(category)
+                finance_item["category"] = category_serializer.data
+                
             return Response({"finances": serializer.data})
         else:
             return Response({"error": "Finances not found"}, status=404)
