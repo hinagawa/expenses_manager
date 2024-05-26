@@ -69,20 +69,25 @@ def get_custom_category(request):
         return Response({"error": "Category not found"}, status=404)
 
 
-@api_view(["PUT"])
-def edit_category(request, pk):
+@api_view(["PUT", "DELETE"])
+def edit_category(request, category_id):
     try:
-        category = Category.objects.get(pk=pk)
+        category = Category.objects.get(pk=category_id)
     except Category.DoesNotExist:
         return Response(
             {"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND
         )
 
-    serializer = CategorySerializer(category, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({"category": serializer.data})
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "PUT":
+        serializer = CategorySerializer(category, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"category": serializer.data})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "DELETE":
+        category.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # finances endpoints
@@ -107,7 +112,7 @@ def create_finance(request):
 @api_view(["GET"])
 def get_finances_by_user(request, user_id):
     try:
-        finances = Finances.objects.filter(id=user_id)
+        finances = Finances.objects.filter(user_id=user_id)
         if finances.exists():
             serializer = FinancesSerializer(finances, many=True)
             return Response({"finances": serializer.data})
@@ -117,20 +122,24 @@ def get_finances_by_user(request, user_id):
         return Response({"error": "Finances not found"}, status=404)
 
 
-@api_view(["PUT"])
-def edit_finance(request, pk):
+@api_view(["PUT", "DELETE"])
+def edit_finance(request, finance_id):
     try:
-        finance = Finances.objects.get(pk=pk)
+        finance = Finances.objects.get(pk=finance_id)
     except Finances.DoesNotExist:
         return Response(
             {"error": "Finance not found"}, status=status.HTTP_404_NOT_FOUND
         )
+    if request.method == "PUT":
+        serializer = FinancesSerializer(finance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"finance": serializer.data})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    serializer = FinancesSerializer(finance, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({"finance": serializer.data})
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "DELETE":
+        finance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # goal endpoints
@@ -166,14 +175,20 @@ def get_goals_by_user(request, user_id):
 
 
 @api_view(["PUT"])
-def edit_goal(request, pk):
+def edit_goal(request, goal_id):
     try:
-        goal = Goals.objects.get(pk=pk)
+        goal = Goals.objects.get(pk=goal_id)
     except Goals.DoesNotExist:
         return Response({"error": "Goal not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    serializer = GoalsSerializer(goal, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response({"goal": serializer.data})
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == "PUT":
+        serializer = GoalsSerializer(goal, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"goal": serializer.data})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "DELETE":
+        goal.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

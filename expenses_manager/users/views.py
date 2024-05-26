@@ -61,6 +61,22 @@ def edit_user(request, pk):
 # currency endpoints
 
 
+@api_view(["POST"])
+# @permission_classes([IsAuthenticated])
+def create_currency(request):
+    if request.method == "POST":
+        serializer = CurrencySerializer(data=request.data)
+        if serializer.is_valid():
+            currency = serializer.save()
+            return Response(
+                {
+                    "message": "Currency created successfully",
+                    "category": CurrencySerializer(currency).data,
+                }
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(["GET"])
 def get_currency(request):
     try:

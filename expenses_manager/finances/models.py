@@ -22,6 +22,7 @@ class Goals(models.Model):
 class Finances(models.Model):
     name = models.CharField(max_length=128)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    sum = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     date_added = models.DateField(auto_now_add=True)
-    is_expenses = models.BooleanField
+    is_expenses = models.BooleanField(default=False)
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE, blank=True, null=True)
