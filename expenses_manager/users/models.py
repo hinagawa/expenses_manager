@@ -12,6 +12,6 @@ class Currency(models.Model):
 class Users(models.Model):
     name = models.CharField(max_length=128)
     lastname = models.CharField(max_length=128)
-    login = models.CharField(max_length=128)
+    email = models.CharField(max_length=128)
     password = models.CharField(max_length=256)
     currency = models.ForeignKey(Currency, on_delete=models.CASCADE)

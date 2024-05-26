@@ -164,7 +164,7 @@ def create_goal(request):
 @api_view(["GET"])
 def get_goals_by_user(request, user_id):
     try:
-        goal = Goals.objects.filter(id=user_id)
+        goal = Goals.objects.filter(user_id=user_id)
         if goal.exists():
             serializer = GoalsSerializer(goal, many=True)
             return Response({"goals": serializer.data})
