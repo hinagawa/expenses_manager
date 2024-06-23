@@ -9,7 +9,7 @@ class Currency(models.Model):
         return self.currency_abbr
 
 
-class Users(models.Model):
+class User(models.Model):
     name = models.CharField(max_length=128)
     lastname = models.CharField(max_length=128)
     email = models.CharField(max_length=128)

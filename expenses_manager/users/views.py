@@ -45,9 +45,11 @@ def get_user_by_id(request, user_id):
             result["user"]["currency"] = currency_serializer.data
             return Response(result)
         else:
-            return Response({"error": "User not found"}, status=404)
+            return Response(
+                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
+            )
     except Users.DoesNotExist:
-        return Response({"error": "User not found"}, status=404)
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["PUT"])
@@ -91,9 +93,13 @@ def get_currency(request):
             serializer = CurrencySerializer(currency, many=True)
             return Response({"currency": serializer.data})
         else:
-            return Response({"error": "Currency not found"}, status=404)
+            return Response(
+                {"error": "Currency not found"}, status=status.HTTP_404_NOT_FOUND
+            )
     except Currency.DoesNotExist:
-        return Response({"error": "Currency not found"}, status=404)
+        return Response(
+            {"error": "Currency not found"}, status=status.HTTP_404_NOT_FOUND
+        )
 
 
 @api_view(["PUT"])

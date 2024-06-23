@@ -38,9 +38,13 @@ def get_all_category(request):
             serializer = CategorySerializer(category, many=True)
             return Response({"category": serializer.data})
         else:
-            return Response({"error": "Category not found"}, status=404)
+            return Response(
+                {"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND
+            )
     except Category.DoesNotExist:
-        return Response({"error": "Category not found"}, status=404)
+        return Response(
+            {"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND
+        )
 
 
 @api_view(["GET"])
@@ -51,9 +55,13 @@ def get_category_by_user(request, user_id):
             serializer = CategorySerializer(category, many=True)
             return Response({"category": serializer.data})
         else:
-            return Response({"error": "Category not found"}, status=404)
+            return Response(
+                {"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND
+            )
     except Category.DoesNotExist:
-        return Response({"error": "Category not found"}, status=404)
+        return Response(
+            {"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND
+        )
 
 
 @api_view(["GET"])
@@ -64,9 +72,13 @@ def get_custom_category(request):
             serializer = CategorySerializer(category, many=True)
             return Response({"category": serializer.data})
         else:
-            return Response({"error": "Category not found"}, status=404)
+            return Response(
+                {"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND
+            )
     except Category.DoesNotExist:
-        return Response({"error": "Category not found"}, status=404)
+        return Response(
+            {"error": "Category not found"}, status=status.HTTP_404_NOT_FOUND
+        )
 
 
 @api_view(["PUT", "DELETE"])
@@ -121,12 +133,16 @@ def get_finances_by_user(request, user_id):
                 category = Category.objects.get(pk=finance_item["category"])
                 category_serializer = CategorySerializer(category)
                 finance_item["category"] = category_serializer.data
-                
+
             return Response({"finances": serializer.data})
         else:
-            return Response({"error": "Finances not found"}, status=404)
+            return Response(
+                {"error": "Finances not found"}, status=status.HTTP_404_NOT_FOUND
+            )
     except Finances.DoesNotExist:
-        return Response({"error": "Finances not found"}, status=404)
+        return Response(
+            {"error": "Finances not found"}, status=status.HTTP_404_NOT_FOUND
+        )
 
 
 @api_view(["PUT", "DELETE"])
@@ -176,9 +192,11 @@ def get_goals_by_user(request, user_id):
             serializer = GoalsSerializer(goal, many=True)
             return Response({"goals": serializer.data})
         else:
-            return Response({"error": "Goals not found"}, status=404)
+            return Response(
+                {"error": "Goals not found"}, status=status.HTTP_404_NOT_FOUND
+            )
     except Goals.DoesNotExist:
-        return Response({"error": "Goals not found"}, status=404)
+        return Response({"error": "Goals not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["PUT"])
