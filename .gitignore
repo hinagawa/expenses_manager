@@ -3,4 +3,5 @@
 **/__pycache__
 **/.DS_Store
 venw
-local.env
+expenses_manager/expenses_manager/.env
+expenses_manager/db.sqlite3

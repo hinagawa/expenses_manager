@@ -1,0 +1,37 @@
+[
+    {
+        "model": "users.currency",
+        "pk": 1,
+        "fields": {
+            "currency_abbr": "USD",
+            "currency_symb": "&dollar;"
+        }
+    },
+    {
+        "model": "users.currency",
+        "pk": 2,
+        "fields": {
+            "currency_abbr": "EUR",
+            "currency_symb": "&euro;"
+        }
+    },
+    {
+        "model": "users.currency",
+        "pk": 3,
+        "fields": {
+            "currency_abbr": "RUB",
+            "currency_symb": "&#8381;"
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+            "name": "Test",
+            "lastname": "User",
+            "email": "test@user.com",
+            "password": "qwerty123",
+            "currency": 1
+        }
+    }
+]
