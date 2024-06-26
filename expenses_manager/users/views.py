@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import Users, Currency
+from .models import User, Currency
 from .serializers import UsersSerializer, CurrencySerializer
 
 # user endpoints
@@ -19,14 +19,15 @@ def create_user(request):
                 {
                     "message": "User created successfully",
                     "category": UsersSerializer(user).data,
-                }
+                },
+                status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])
 def get_all_users(request):
-    users = Users.objects.all()
+    users = User.objects.all()
     serializer = UsersSerializer(users, many=True)
     return Response({"users": serializer.data})
 
@@ -34,7 +35,7 @@ def get_all_users(request):
 @api_view(["GET"])
 def get_user_by_id(request, user_id):
     try:
-        q = Users.objects.filter(id=user_id)
+        q = User.objects.filter(id=user_id)
         if q.exists():
             user = q.get()
             serializer = UsersSerializer(user)
@@ -48,15 +49,15 @@ def get_user_by_id(request, user_id):
             return Response(
                 {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
             )
-    except Users.DoesNotExist:
+    except User.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(["PUT"])
 def edit_user(request, pk):
     try:
-        user = Users.objects.get(pk=pk)
-    except Users.DoesNotExist:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = UsersSerializer(user, data=request.data)
@@ -80,7 +81,8 @@ def create_currency(request):
                 {
                     "message": "Currency created successfully",
                     "category": CurrencySerializer(currency).data,
-                }
+                },
+                status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

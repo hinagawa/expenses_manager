@@ -3,11 +3,11 @@ from rest_framework.decorators import api_view
 
 # from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-from .models import Category, Finances, Goals
+from .models import Category, Finance, Goal
 from .serializers import (
     CategorySerializer,
-    FinancesSerializer,
-    GoalsSerializer,
+    FinanceSerializer,
+    GoalSerializer,
 )
 
 # category endpoints
@@ -109,14 +109,15 @@ def edit_category(request, category_id):
 # @permission_classes([IsAuthenticated])
 def create_finance(request):
     if request.method == "POST":
-        serializer = FinancesSerializer(data=request.data)
+        serializer = FinanceSerializer(data=request.data)
         if serializer.is_valid():
             finance = serializer.save()
             return Response(
                 {
                     "message": "Finance created successfully",
-                    "category": FinancesSerializer(finance).data,
-                }
+                    "category": FinanceSerializer(finance).data,
+                },
+                status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -124,9 +125,9 @@ def create_finance(request):
 @api_view(["GET"])
 def get_finances_by_user(request, user_id):
     try:
-        finances = Finances.objects.filter(user_id=user_id)
+        finances = Finance.objects.filter(user_id=user_id)
         if finances.exists():
-            serializer = FinancesSerializer(finances, many=True)
+            serializer = FinanceSerializer(finances, many=True)
             result = {"finances": serializer.data}
 
             for finance_item in result["finances"]:
@@ -148,13 +149,13 @@ def get_finances_by_user(request, user_id):
 @api_view(["PUT", "DELETE"])
 def edit_finance(request, finance_id):
     try:
-        finance = Finances.objects.get(pk=finance_id)
-    except Finances.DoesNotExist:
+        finance = Finance.objects.get(pk=finance_id)
+    except Finance.DoesNotExist:
         return Response(
             {"error": "Finance not found"}, status=status.HTTP_404_NOT_FOUND
         )
     if request.method == "PUT":
-        serializer = FinancesSerializer(finance, data=request.data)
+        serializer = FinanceSerializer(finance, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"finance": serializer.data})
@@ -172,14 +173,15 @@ def edit_finance(request, finance_id):
 # @permission_classes([IsAuthenticated])
 def create_goal(request):
     if request.method == "POST":
-        serializer = GoalsSerializer(data=request.data)
+        serializer = GoalSerializer(data=request.data)
         if serializer.is_valid():
             goal = serializer.save()
             return Response(
                 {
                     "message": "Goal created successfully",
-                    "category": GoalsSerializer(goal).data,
-                }
+                    "category": GoalSerializer(goal).data,
+                },
+                status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -187,9 +189,9 @@ def create_goal(request):
 @api_view(["GET"])
 def get_goals_by_user(request, user_id):
     try:
-        goal = Goals.objects.filter(user_id=user_id)
+        goal = Goal.objects.filter(user_id=user_id)
         if goal.exists():
-            serializer = GoalsSerializer(goal, many=True)
+            serializer = GoalSerializer(goal, many=True)
             return Response({"goals": serializer.data})
         else:
             return Response(
@@ -202,12 +204,12 @@ def get_goals_by_user(request, user_id):
 @api_view(["PUT"])
 def edit_goal(request, goal_id):
     try:
-        goal = Goals.objects.get(pk=goal_id)
-    except Goals.DoesNotExist:
+        goal = Goal.objects.get(pk=goal_id)
+    except Goal.DoesNotExist:
         return Response({"error": "Goal not found"}, status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "PUT":
-        serializer = GoalsSerializer(goal, data=request.data)
+        serializer = GoalSerializer(goal, data=request.data)
 
         if serializer.is_valid():
             serializer.save()

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Finances, Goals
+from .models import Category, Finance, Goal
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -8,13 +8,13 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class FinancesSerializer(serializers.ModelSerializer):
+class FinanceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Finances
+        model = Finance
         fields = "__all__"
 
 
-class GoalsSerializer(serializers.ModelSerializer):
+class GoalSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Goals
+        model = Goal
         fields = "__all__"
