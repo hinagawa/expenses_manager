@@ -5,34 +5,18 @@ from rest_framework import status
 from .models import User, Currency
 from .serializers import UsersSerializer, CurrencySerializer
 
+
 # user endpoints
-
-
-@api_view(["POST"])
-# @permission_classes([IsAuthenticated])
-def create_user(request):
-    if request.method == "POST":
-        serializer = UsersSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response(
-                {
-                    "message": "User created successfully",
-                    "category": UsersSerializer(user).data,
-                },
-                status=status.HTTP_201_CREATED,
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 @api_view(["GET"])
-def get_all_users(request):
+@permission_classes([IsAuthenticated])
+def get_all_users():
     users = User.objects.all()
     serializer = UsersSerializer(users, many=True)
     return Response({"users": serializer.data})
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_user_by_id(request, user_id):
     try:
         q = User.objects.filter(id=user_id)
@@ -54,6 +38,7 @@ def get_user_by_id(request, user_id):
 
 
 @api_view(["PUT"])
+@permission_classes([IsAuthenticated])
 def edit_user(request, pk):
     try:
         user = User.objects.get(pk=pk)
@@ -71,7 +56,7 @@ def edit_user(request, pk):
 
 
 @api_view(["POST"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create_currency(request):
     if request.method == "POST":
         serializer = CurrencySerializer(data=request.data)
@@ -88,7 +73,8 @@ def create_currency(request):
 
 
 @api_view(["GET"])
-def get_currency(request):
+@permission_classes([IsAuthenticated])
+def get_currency():
     try:
         currency = Currency.objects.all()
         if currency.exists():
@@ -105,6 +91,7 @@ def get_currency(request):
 
 
 @api_view(["PUT"])
+@permission_classes([IsAuthenticated])
 def edit_currency(request, pk):
     try:
         currency = Currency.objects.get(pk=pk)

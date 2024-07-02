@@ -1,8 +1,7 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from .models import Category, Finance, Goal
 from .serializers import (
     CategorySerializer,
@@ -14,7 +13,7 @@ from .serializers import (
 
 
 @api_view(["POST"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create_user_category(request):
     if request.method == "POST":
         serializer = CategorySerializer(data=request.data)
@@ -31,6 +30,7 @@ def create_user_category(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_all_category(request):
     try:
         category = Category.objects.filter()
@@ -48,6 +48,7 @@ def get_all_category(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_category_by_user(request, user_id):
     try:
         category = Category.objects.filter(id=user_id)
@@ -65,6 +66,7 @@ def get_category_by_user(request, user_id):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_custom_category(request):
     try:
         category = Category.objects.filter(is_custom=True)
@@ -82,6 +84,7 @@ def get_custom_category(request):
 
 
 @api_view(["PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
 def edit_category(request, category_id):
     try:
         category = Category.objects.get(pk=category_id)
@@ -106,6 +109,7 @@ def edit_category(request, category_id):
 
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 # @permission_classes([IsAuthenticated])
 def create_finance(request):
     if request.method == "POST":
@@ -123,6 +127,7 @@ def create_finance(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_finances_by_user(request, user_id):
     try:
         finances = Finance.objects.filter(user_id=user_id)
@@ -147,6 +152,7 @@ def get_finances_by_user(request, user_id):
 
 
 @api_view(["PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
 def edit_finance(request, finance_id):
     try:
         finance = Finance.objects.get(pk=finance_id)
@@ -170,7 +176,7 @@ def edit_finance(request, finance_id):
 
 
 @api_view(["POST"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create_goal(request):
     if request.method == "POST":
         serializer = GoalSerializer(data=request.data)
@@ -187,6 +193,7 @@ def create_goal(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_goals_by_user(request, user_id):
     try:
         goal = Goal.objects.filter(user_id=user_id)
@@ -202,6 +209,7 @@ def get_goals_by_user(request, user_id):
 
 
 @api_view(["PUT"])
+@permission_classes([IsAuthenticated])
 def edit_goal(request, goal_id):
     try:
         goal = Goal.objects.get(pk=goal_id)
